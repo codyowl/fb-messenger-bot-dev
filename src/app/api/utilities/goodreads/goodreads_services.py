@@ -1,6 +1,7 @@
 from xml.etree import ElementTree
 
 import yaml
+from dotmap import DotMap
 
 from ..core_utilities import read_commands_from_yaml_file
 
@@ -19,17 +20,15 @@ def get_books_list(book_name):
     title_image_dict = dict(zip(title, image))
     for title, image_url in title_image_dict.items():
         id_as_payload_value = image_url.rsplit("/")[-1].split(".")[0]
-        element = {
-            "title": title,
-            "image_url": image_url,
-            "buttons": [
-                {
-                    "type": "postback",
-                    "title": title,
-                    "payload": id_as_payload_value + "-" + title,
-                }
-            ],
-        }
+        element = DotMap()
+        element.title = title
+        element.image_url = image_url
+        element.buttons = []
+        buttons_map = DotMap()
+        buttons_map.type = "postback"
+        buttons_map.title = title
+        buttons_map.payload = id_as_payload_value + "-" + title
+        element.buttons.append(buttons_map)
         elements.append(element)
     return elements
 

@@ -1,6 +1,5 @@
 from flask import Flask, request
 from pymessenger.bot import Bot
-
 from utilities.amazon.amazon_services import (
     get_amazon_search_page,
     send_amazon_url_as_message,
@@ -13,10 +12,7 @@ from utilities.facebook.facebook_services import (
 )
 from utilities.goodreads.goodreads_services import get_books_list, get_reviews_url_by_id
 from utilities.ibm.ibm_services import ibm_watson_suggestion
-from utilities.messages import ( 
-	GREETINGS_EXCEPTION,
-	MESSAGE_PROCESSED
-)
+from utilities.messages import GREETINGS_EXCEPTION, MESSAGE_PROCESSED
 
 # reading credentials from yaml file
 yaml_file = "./credentials.yaml"
@@ -106,7 +102,7 @@ def receive_message():
                         send_message(bot, recipient_id, response_sent_text)
                         amazon_url = get_amazon_search_page(user_selected_book_name)
                         send_amazon_url_as_message(
-                            recipient_id, user_selected_book_name, amazon_url
+                            bot, recipient_id, user_selected_book_name, amazon_url
                         )
                     else:
                         response_sent_text = (

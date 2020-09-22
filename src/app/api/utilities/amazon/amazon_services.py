@@ -1,4 +1,5 @@
 import yaml
+from dotmap import DotMap
 
 from ..core_utilities import read_commands_from_yaml_file
 
@@ -14,13 +15,17 @@ def get_amazon_search_page(book_name):
 
 
 # function to send amazon url for a given book
-def send_amazon_url_as_message(recipient_id, book_name, amazon_url):
+def send_amazon_url_as_message(bot, recipient_id, book_name, amazon_url):
     elements = []
-    element = {
-        "title": book_name,
-        "image_url": "https://img.icons8.com/material-rounded/24/000000/amazon.png",
-        "buttons": [{"type": "web_url", "url": amazon_url, "title": "View"}],
-    }
+    element = DotMap()
+    element.title = book_name
+    element.image_url = "https://img.icons8.com/material-rounded/24/000000/amazon.png"
+    element.buttons = []
+    buttons_map = DotMap()
+    buttons_map.type = "web_url"
+    buttons_map.url = amazon_url
+    buttons_map.title = "view"
+    element.buttons.append(buttons_map)
     elements.append(element)
     bot.send_generic_message(recipient_id, elements)
     return "success"
